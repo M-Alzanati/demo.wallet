@@ -5,27 +5,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
-using Application.DTOs;
+using Application.Wallets.Dtos;
+using Domain.Exceptions;
 
 namespace Application.Wallets.Commands
 {
-    public class CreditWalletCommand : IRequest
+    public class CreditWalletCommand : IRequest<WalletDto>
     {
         public Guid WalletId { get; }
         public decimal Amount { get; }
         public string TransactionId { get; }
+        public byte[] RowVersion { get; }
 
         public CreditWalletCommand(Guid walletId, CreditWalletRequest request)
         {
             WalletId = walletId;
             Amount = request.Amount;
+            RowVersion = Convert.FromBase64String(request.RowVersion);
             TransactionId = string.IsNullOrWhiteSpace(request.TransactionId)
                 ? Guid.NewGuid().ToString()
                 : request.TransactionId;
         }
     }
 
-    public class CreditWalletCommandHandler : IRequestHandler<CreditWalletCommand>
+    public class CreditWalletCommandHandler : IRequestHandler<CreditWalletCommand, WalletDto>
     {
         private readonly IWalletRepository _walletRepository;
         private readonly IWalletTransactionRepository _walletTransactionRepository;
@@ -38,25 +41,31 @@ namespace Application.Wallets.Commands
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Handle(CreditWalletCommand request, CancellationToken cancellationToken)
+        public async Task<WalletDto> Handle(CreditWalletCommand request, CancellationToken cancellationToken)
         {
             var wallet = await _walletRepository.GetById(request.WalletId, cancellationToken);
             if (wallet == null) throw new KeyNotFoundException("Wallet not found.");
 
             if (await _walletTransactionRepository.ExistsAsync(wallet.Id, request.TransactionId))
             {
-                return;
+                throw new NotFoundWalletException();
             }
 
             wallet.Credit(request.Amount, request.TransactionId);
 
+            wallet.RowVersion = request.RowVersion;
             _walletRepository.Update(wallet);
 
-            // Save transaction record explicitly via repository or rely on EF cascade save
             var transaction = wallet.Transactions.Last();
             await _walletTransactionRepository.AddAsync(transaction);
 
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return new WalletDto
+            {
+                Id = wallet.Id,
+                Balance = wallet.Balance,
+                RowVersion = Convert.ToBase64String(wallet.RowVersion),
+            };
         }
     }
 }

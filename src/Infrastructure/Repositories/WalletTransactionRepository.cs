@@ -25,8 +25,7 @@ namespace Infrastructure.Repositories
 
         public async Task AddAsync(WalletTransaction transaction)
         {
-            _context.WalletTransactions.Add(transaction);
-            await Task.CompletedTask;
+            await Task.FromResult(_context.WalletTransactions.Add(transaction));
         }
 
         public async Task<bool?> IsProcessed(Guid walletId, string transactionId)

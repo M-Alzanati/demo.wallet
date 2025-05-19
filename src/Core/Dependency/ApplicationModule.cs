@@ -1,21 +1,19 @@
-﻿using Application.Wallets.Commands;
+﻿using System;
+using System.Reflection;
+using Application.Common.Behaviors;
+using Application.Wallets.Commands;
 using Autofac;
 using MediatR;
 using MediatR.Extensions.Autofac.DependencyInjection;
-using System;
-using System.Reflection;
 using MediatR.Extensions.Autofac.DependencyInjection.Builder;
 using Module = Autofac.Module;
 
-namespace Application.DependencyInjection
+namespace Application.Dependency
 {
     public class ApplicationModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-
-            // Register MediatR
             var configuration = MediatRConfigurationBuilder
                 .Create(typeof(CreateWalletCommand).Assembly)
                 .WithAllOpenGenericHandlerTypesRegistered()
@@ -30,9 +28,8 @@ namespace Application.DependencyInjection
                 .AsClosedTypesOf(typeof(IRequestHandler<,>))
                 .AsImplementedInterfaces();
 
-            builder.RegisterGeneric(typeof(ConcurrencyRetryBehavior<,>))
-                .As(typeof(IPipelineBehavior<,>))
-                .InstancePerLifetimeScope();
+            builder.RegisterGeneric(typeof(ResilienceBehavior<,>))
+                .As(typeof(IPipelineBehavior<,>));
 
             builder.Register<Func<Type, object>>(context =>
             {
@@ -40,6 +37,9 @@ namespace Application.DependencyInjection
                 return t => c.Resolve(t);
             });
 
+            builder.RegisterAssemblyTypes(ThisAssembly)
+                .AsClosedTypesOf(typeof(IRequestHandler<,>))
+                .InstancePerLifetimeScope();
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 using System.Linq;
 using System.Threading.Tasks;
-using Domain.Base;
 using Domain.Interfaces;
 using System.Threading;
-using Application.DTOs;
+using Application.Wallets.Dtos;
+using Common;
 
 namespace Application.Wallets.Queries
 {
@@ -44,7 +45,8 @@ namespace Application.Wallets.Queries
             var walletDtos = pagedWallets.Items.Select(w => new WalletDto
             {
                 Id = w.Id,
-                Balance = w.Balance
+                Balance = w.Balance,
+                RowVersion = Convert.ToBase64String(w.RowVersion)
             }).ToList();
 
             return new PagedResult<WalletDto>(walletDtos, pagedWallets.TotalCount);

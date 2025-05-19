@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Domain.Entities
@@ -16,6 +17,7 @@ namespace Domain.Entities
             };
         }
 
+        [Index(nameof(Id))]
         public Guid Id { get; set; }
         public decimal Balance { get; private set; }
 
@@ -27,7 +29,7 @@ namespace Domain.Entities
         public void Credit(decimal amount, string transactionId)
         {
             if (string.IsNullOrEmpty(transactionId)) throw new ArgumentException("TransactionId is required.");
-            if (HasTransaction(transactionId)) return; // Idempotency: ignore if already applied
+            if (HasTransaction(transactionId)) return;
 
             if (amount <= 0) throw new ArgumentException("Amount must be positive.");
 

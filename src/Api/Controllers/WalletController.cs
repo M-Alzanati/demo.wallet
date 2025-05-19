@@ -3,11 +3,12 @@ using Application.Wallets.Queries;
 using System;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Application.Wallets.Dtos;
 using MediatR;
-using Application.DTOs;
 
 namespace Api.Controllers
 {
+    //[Authorize]
     [RoutePrefix("api/wallets")]
     public class WalletController : ApiController
     {
@@ -21,22 +22,22 @@ namespace Api.Controllers
         [HttpPost, Route("")]
         public async Task<IHttpActionResult> Create()
         {
-            var walletId = await _mediator.Send(new CreateWalletCommand());
-            return Ok(walletId);
+            var wallet = await _mediator.Send(new CreateWalletCommand());
+            return Ok(wallet);
         }
 
         [HttpPost, Route("{id:guid}/credit")]
         public async Task<IHttpActionResult> Credit(Guid id, [FromBody] CreditWalletRequest request)
         {
-            await _mediator.Send(new CreditWalletCommand(id, request));
-            return Ok();
+            var wallet = await _mediator.Send(new CreditWalletCommand(id, request));
+            return Ok(wallet);
         }
 
         [HttpPost, Route("{id:guid}/debit")]
         public async Task<IHttpActionResult> Debit(Guid id, [FromBody] DebitWalletRequest request)
         {
-            await _mediator.Send(new DebitWalletCommand(id, request));
-            return Ok();
+            var wallet = await _mediator.Send(new DebitWalletCommand(id, request));
+            return Ok(wallet);
         }
 
         [HttpGet, Route("{id:guid}")]
@@ -57,6 +58,13 @@ namespace Api.Controllers
         public IHttpActionResult GetNewTransactionId()
         {
             return Ok(Guid.NewGuid().ToString());
+        }
+
+        [HttpGet, Route("{id:guid}/row-version")]
+        public async Task<IHttpActionResult> GetRowVersion(Guid id)
+        {
+            var wallet = await _mediator.Send(new GetWalletsRowVersionQuery(id));
+            return Ok(wallet);
         }
     }
 }

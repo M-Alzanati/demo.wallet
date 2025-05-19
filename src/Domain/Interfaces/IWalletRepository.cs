@@ -2,7 +2,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Domain.Base;
+using Common;
 
 namespace Domain.Interfaces
 {
@@ -13,7 +13,5 @@ namespace Domain.Interfaces
         void Update(Wallet wallet);
         bool Exists(Guid id);
         Task<PagedResult<Wallet>> GetWalletsAsync(int pageNumber, int pageSize, decimal? minBalance = null, decimal? maxBalance = null);
-
-        Task SaveChanges(CancellationToken cancellationToken);
     }
 }

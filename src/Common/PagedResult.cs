@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Domain.Base
+namespace Common
 {
     public class PagedResult<T>
     {
@@ -11,6 +11,11 @@ namespace Domain.Base
         {
             Items = items;
             TotalCount = totalCount;
+        }
+
+        public PagedResult()
+        {
+            
         }
     }
 }

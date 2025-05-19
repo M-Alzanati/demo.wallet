@@ -1,23 +1,28 @@
-﻿namespace Infrastructure.Migrations
-{
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
+﻿using Domain.Entities;
+using System.Data.Entity.Migrations;
+using System.Linq;
+using Common;
+using Infrastructure.Data;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Infrastructure.Data.WalletContext>
+namespace Infrastructure.Migrations
+{
+    internal sealed class Configuration : DbMigrationsConfiguration<WalletContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(Infrastructure.Data.WalletContext context)
+        protected override void Seed(WalletContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            if (context.Users.Any())
+            {
+                return;
+            }
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method
-            //  to avoid creating duplicate seed data.
+            var user = User.Create("Test user", "h@gmail.com", PasswordHelper.ComputeSha256Hash("123"));
+            context.Users.Add(user);
+            context.SaveChanges();
         }
     }
 }

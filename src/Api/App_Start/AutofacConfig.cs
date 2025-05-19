@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Reflection;
 using System.Web.Http;
-using Application.DependencyInjection;
+using Api.Handlers;
+using Application.Dependency;
 using Autofac;
 using Autofac.Integration.WebApi;
-using Infrastructure.DependencyInjection;
+using Infrastructure.Dependency;
+using MediatR;
 
 namespace Api
 {
@@ -14,18 +16,16 @@ namespace Api
         {
             var builder = new ContainerBuilder();
 
-            // Register Web API controllers
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
             builder.RegisterWebApiFilterProvider(config);
 
-            //mvc
             builder.RegisterAssemblyModules(Assembly.GetExecutingAssembly());
 
-            //web api
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).PropertiesAutowired();
             builder.RegisterModule<InfrastructureModule>();
             builder.RegisterModule<ApplicationModule>();
 
+            builder.RegisterType<Mediator>().As<IMediator>().InstancePerLifetimeScope();
             builder.Register<Func<Type, object>>(context =>
             {
                 var c = context.Resolve<IComponentContext>();
@@ -33,6 +33,7 @@ namespace Api
             });
 
             builder.RegisterWebApiModelBinderProvider();
+            builder.RegisterType<BasicAuthHandler>().InstancePerLifetimeScope();
 
             var container = builder.Build();
             GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);

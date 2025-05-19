@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Data;
-using Domain.Base;
 using System.Data.Entity;
+using Common;
 
 namespace Infrastructure.Repositories
 {
@@ -55,11 +55,6 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
 
             return new PagedResult<Wallet>(items, totalCount);
-        }
-
-        public async Task SaveChanges(CancellationToken cancellationToken)
-        {
-            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

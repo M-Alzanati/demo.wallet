@@ -1,5 +1,4 @@
-﻿using Application.DTOs;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
 using MediatR;
@@ -7,24 +6,27 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Wallets.Dtos;
 
 namespace Application.Wallets.Commands
 {
-    public class DebitWalletCommand : IRequest
+    public class DebitWalletCommand : IRequest<WalletDto>
     {
         public Guid WalletId { get; }
         public decimal Amount { get; }
         public string TransactionId { get; }
+        public byte[] RowVersion { get; }
 
         public DebitWalletCommand(Guid walletId, DebitWalletRequest request)
         {
             WalletId = walletId;
             Amount = request.Amount;
+            RowVersion = Convert.FromBase64String(request.RowVersion);
             TransactionId = request.TransactionId ?? throw new ArgumentNullException(nameof(request.TransactionId));
         }
     }
 
-    public class DebitWalletCommandHandler : IRequestHandler<DebitWalletCommand>
+    public class DebitWalletCommandHandler : IRequestHandler<DebitWalletCommand, WalletDto>
     {
         private readonly IWalletRepository _walletRepository;
         private readonly IWalletTransactionRepository _transactionRepository;
@@ -40,11 +42,11 @@ namespace Application.Wallets.Commands
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Handle(DebitWalletCommand request, CancellationToken cancellationToken)
+        public async Task<WalletDto> Handle(DebitWalletCommand request, CancellationToken cancellationToken)
         {
             if (!await _transactionRepository.ExistsAsync(request.WalletId, request.TransactionId))
             {
-                throw new NotFoundTransaction("Transaction for wallet not found");
+                throw new NotFoundTransactionException("Transaction for wallet not found");
             }
 
             if (await _transactionRepository.IsProcessed(request.WalletId, request.TransactionId) == true)
@@ -70,7 +72,13 @@ namespace Application.Wallets.Commands
             _walletRepository.Update(wallet);
             await _transactionRepository.AddAsync(transaction);
 
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return new WalletDto
+            {
+                Id = wallet.Id,
+                Balance = wallet.Balance,
+                RowVersion = Convert.ToBase64String(wallet.RowVersion),
+            };
         }
     }
 }

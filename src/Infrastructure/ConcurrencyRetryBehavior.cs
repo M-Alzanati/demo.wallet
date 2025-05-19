@@ -1,42 +1,41 @@
 ﻿using MediatR;
 using System;
+using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application
+namespace Infrastructure
 {
     public class ConcurrencyRetryBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        private readonly int _maxRetries;
-        private readonly TimeSpan _delayBetweenRetries;
+        private const int MaxRetryCount = 3;
 
-        public ConcurrencyRetryBehavior(int maxRetries = 3, TimeSpan? delayBetweenRetries = null)
+        public ConcurrencyRetryBehavior()
         {
-            _maxRetries = maxRetries;
-            _delayBetweenRetries = delayBetweenRetries ?? TimeSpan.FromMilliseconds(200);
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            var retryCount = 0;
-
-            while (true)
+            for (var retry = 0; retry < MaxRetryCount; retry++)
             {
                 try
                 {
                     return await next(cancellationToken);
                 }
-                catch (Exception ex)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    retryCount++;
+                    Trace.TraceError(ex.Message, "Concurrency conflict detected. Retrying {RetryCount}...", retry + 1);
 
-                    if (retryCount > _maxRetries)
+                    if (retry == MaxRetryCount - 1)
                         throw;
 
-                    await Task.Delay(_delayBetweenRetries, cancellationToken);
+                    await Task.Delay(50, cancellationToken);
                 }
             }
+
+            throw new InvalidOperationException("Failed to process due to concurrency issues.");
         }
     }
 }

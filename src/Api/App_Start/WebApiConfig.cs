@@ -1,5 +1,7 @@
-﻿using System.Web.Http;
+﻿using System.Net.Http;
+using System.Web.Http;
 using Api.Filters;
+using Api.Handlers;
 
 namespace Api
 {
@@ -7,11 +9,8 @@ namespace Api
     {
         public static void Register(HttpConfiguration config)
         {
-            config.Filters.Add(new GlobalExceptionFilter());
-
             config.MapHttpAttributeRoutes();
 
-            // Default route (optional)
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
@@ -19,6 +18,12 @@ namespace Api
             );
 
             AutofacConfig.Register(config);
+
+            if (config.DependencyResolver.GetService(typeof(BasicAuthHandler)) is DelegatingHandler handler)
+            {
+                //config.MessageHandlers.Add(handler);
+            }
+            config.Filters.Add(new GlobalExceptionFilter());
         }
     }
 }

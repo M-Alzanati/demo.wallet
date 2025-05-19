@@ -1,17 +1,25 @@
-﻿using Application.Wallets.Commands;
+﻿using System;
+using Application.Wallets.Commands;
 using Autofac;
+using Common;
+using Domain.Exceptions;
 using Domain.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Logging;
 using Infrastructure.Repositories;
 using MediatR;
-using System;
 
-namespace Infrastructure.DependencyInjection
+namespace Infrastructure.Dependency
 {
     public class InfrastructureModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterGeneric(typeof(SerilogAdapter<>))
+                .As(typeof(IAppLogger<>))
+                .SingleInstance();
+
+
             builder.RegisterType<WalletContext>()
                 .AsSelf()
                 .InstancePerRequest();
@@ -26,6 +34,10 @@ namespace Infrastructure.DependencyInjection
 
             builder.RegisterType<WalletTransactionRepository>()
                 .As<IWalletTransactionRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<UserRepository>()
+                .As<IUserRepository>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(typeof(CreateWalletCommandHandler).Assembly)

@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Data
@@ -13,9 +14,9 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-        public async Task<int> SaveChangesAsync()
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            return await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync(cancellationToken);
         }
 
         public void Dispose()
