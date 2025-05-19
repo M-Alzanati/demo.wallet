@@ -1,18 +1,32 @@
 # demo.wallet
 
-* What things would you add/change to make this production ready? 
+## Key Features Included
 
-* Domain-Driven Design we should introduce aggregates & domain events
-- Use value objects for Amount, TransactionId, etc.
-- CQRS/Event Sourcing	we should separate read/write models
-- Reintroduce event sourcing with snapshotting support if needed
-- Unit of Workensure a robust implementation to manage transactions explicitly
-- Optimistic Concurrency already used with RowVersion — keep it and add retry policy.
-- Auditing with add a transaction history table (if not event sourcing), store metadata like timestamps, IPs, user agents.
-- Authentication & Authorization with integrate OAuth2/JWT and authorize wallets per-user.
-- Input Validation use FluentValidation or DataAnnotations. Prevent invalid requests.
-- Rate Limiting	prevent abuse via a middleware
-- Use SQL indexing, partitioning, and possibly redis cache for hot wallets.
-- Background Processing	Offload slow operations using Hangfire, Quartz.
-- Logging	Serilog/NLog + structured logs. Include TransactionId, WalletId, etc.
-- Health Checks	Expose /health endpoint for readiness/liveness probes.
+* Core           ├──	Entities + Interfaces (pure domain logic)
+* Application    ├──	CQRS handlers, DTOs, validation, retry logic, DI
+* Infrastructure ├──	EF DbContext, Repos, Migrations, DI
+* Web	           ├──  Web API, Auth filter, Controllers, DI, Config
+
+## Benefits of This Structure
+* Clear separation of concerns
+* Aligned with Clean Architecture
+* Easily extendable for: Logging, Caching, Messaging, Token-based Auth
+
+## What things would you add/change to make this production ready? 
+
+- Relate debit transactions to the credit transactions they spend.
+- Prevent duplicate processing of requests, especially on retries by using some sort of tokens.
+- In unit of work enforce consistent transaction boundaries.
+- Ensure atomicity between changes to Wallet and WalletTransaction.
+- Integrating with messaging systems like RabbitMq or Kafka or any cloud service.
+- Audit logging.
+- Deploy behind a load balancer.
+- Adding Application Gateway.
+- Add retries for failed commands, particularly around concurrenc.
+- Replace Basic Auth with OAuth2/JWT.
+- Rate limiting and anti-fraud logic.
+- Setup failure or performance thresholds.
+- Validation by using FluentValidation for DTOs.
+- API versioning.
+- Unit tests for all commands, queries, domain models.
+- Separate query model optimized for reads.
