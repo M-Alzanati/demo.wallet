@@ -2,12 +2,12 @@
 
 ## project structure
 WalletService.sln
+WalletService.sln
 │
 ├── 📁 WalletService.Core              → Domain entities, interfaces, enums
 │   ├── Entities
 │   │   ├── Wallet.cs
 │   │   ├── WalletTransaction.cs
-|   |   ├── User.cs
 │   ├── Interfaces
 │   │   ├── IWalletRepository.cs
 │   │   ├── IWalletTransactionRepository.cs
@@ -39,11 +39,11 @@ WalletService.sln
 ├── 📁 WalletService.Infrastructure    → EF, Repositories, Migrations, Seed
 │   ├── Data
 │   │   ├── AppDbContext.cs
+│   │   └── Migrations/
 │   ├── Repositories
 │   │   ├── WalletRepository.cs
 │   │   ├── WalletTransactionRepository.cs
 │   │   ├── UserRepository.cs
-|   |   ├── Migrations/
 │   ├── DependencyInjection
 │       ├── InfrastructureModule.cs
 
@@ -52,16 +52,25 @@ WalletService.sln
 │   │   ├── WalletController.cs
 │   │   ├── AuthController.cs
 │   ├── Authentication
-│   │   ├── BasicAuthFilter.cs
+│   │   ├── BasicAuthFilter.cs        ✅ replaces old handler
 │   ├── DependencyInjection
 │   │   ├── AutofacConfig.cs
 │   ├── Filters
 │   │   ├── GlobalExceptionFilter.cs
+│   ├── Models
+│   │   ├── CreditWalletRequest.cs
+│   │   ├── DebitWalletRequest.cs
+│   │   ├── LoginRequestDto.cs
 │   ├── App_Start
 │   │   ├── WebApiConfig.cs
 │   │   ├── FilterConfig.cs
 │   ├── Global.asax
 │   ├── Web.config
+
+├── 📁 WalletService.Tests             → (Optional) Unit tests
+│   ├── WalletService.Application.Tests
+│   ├── WalletService.Infrastructure.Tests
+│   └── WalletService.Web.Tests
 
 
 ## Key Features Included
