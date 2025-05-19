@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [RoutePrefix("api/wallets")]
     public class WalletController : ApiController
     {

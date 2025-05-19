@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Application.Users.Dtos;
 using Common;
 using Domain.Exceptions;
 using Domain.Interfaces;

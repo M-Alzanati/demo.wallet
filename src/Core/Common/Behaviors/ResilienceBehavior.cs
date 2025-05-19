@@ -29,5 +29,4 @@ namespace Application.Common.Behaviors
                     next(cancellationToken)));
         }
     }
-
 }

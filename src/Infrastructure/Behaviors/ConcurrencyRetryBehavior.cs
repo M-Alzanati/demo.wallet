@@ -1,11 +1,11 @@
-﻿using MediatR;
-using System;
+﻿using System;
 using System.Data.Entity.Infrastructure;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 
-namespace Infrastructure
+namespace Infrastructure.Behaviors
 {
     public class ConcurrencyRetryBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>

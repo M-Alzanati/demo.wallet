@@ -106,7 +106,7 @@
     <Compile Include="Wallets\Commands\ConcurrencyCommand.cs" />
     <Compile Include="Wallets\Dtos\DebitWalletRequest.cs" />
     <Compile Include="Wallets\Dtos\CreditWalletRequest.cs" />
-    <Compile Include="Users\UserDto.cs" />
+    <Compile Include="Users\Dtos\UserDto.cs" />
     <Compile Include="Wallets\Dtos\WalletDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wallets\Commands\CreateWalletCommand.cs" />

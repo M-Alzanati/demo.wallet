@@ -1,4 +1,4 @@
-﻿namespace Application.Users
+﻿namespace Application.Users.Dtos
 {
     public class UserDto
     {

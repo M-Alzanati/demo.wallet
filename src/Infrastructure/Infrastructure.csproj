@@ -103,7 +103,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConcurrencyRetryBehavior.cs" />
+    <Compile Include="Behaviors\ConcurrencyRetryBehavior.cs" />
     <Compile Include="Data\UnitOfWork.cs" />
     <Compile Include="Dependency\InfrastructureModule .cs" />
     <Compile Include="Logging\SerilogAdapter.cs" />
@@ -136,9 +136,7 @@
       <Name>Domain</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Behaviors\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202505191424074_Initial.resx">
       <DependentUpon>202505191424074_Initial.cs</DependentUpon>
