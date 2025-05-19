@@ -3,7 +3,7 @@
 ## Key Features Included
 
 * Core           ├──	Entities + Interfaces (pure domain logic)
-* Application    ├──	CQRS handlers, DTOs, validation, retry logic
+* Application    ├──	CQRS handlers, DTOs, validation, retry logic, DI
 * Infrastructure ├──	EF DbContext, Repos, Migrations, DI
 * Web	           ├──  Web API, Auth filter, Controllers, DI, Config
 
