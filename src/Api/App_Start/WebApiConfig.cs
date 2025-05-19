@@ -21,7 +21,7 @@ namespace Api
 
             if (config.DependencyResolver.GetService(typeof(BasicAuthHandler)) is DelegatingHandler handler)
             {
-                //config.MessageHandlers.Add(handler);
+                config.MessageHandlers.Add(handler);
             }
             config.Filters.Add(new GlobalExceptionFilter());
         }

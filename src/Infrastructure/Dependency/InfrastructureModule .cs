@@ -19,10 +19,9 @@ namespace Infrastructure.Dependency
                 .As(typeof(IAppLogger<>))
                 .SingleInstance();
 
-
             builder.RegisterType<WalletContext>()
                 .AsSelf()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<UnitOfWork>()
                 .As<IUnitOfWork>()

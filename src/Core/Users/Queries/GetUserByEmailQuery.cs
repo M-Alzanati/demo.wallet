@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Common;
 using Domain.Exceptions;
+using Domain.Interfaces;
 using MediatR;
 
 namespace Application.Users.Queries

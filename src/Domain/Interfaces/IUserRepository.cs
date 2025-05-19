@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Domain.Entities;
 
-namespace Domain.Exceptions
+namespace Domain.Interfaces
 {
     public interface IUserRepository
     {
