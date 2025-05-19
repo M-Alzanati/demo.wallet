@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "d21f0bee-caf7-473e-8014-9965add92fa2",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "2938917"
+	},
+	"item": [
+		{
+			"name": "Add wallet",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "123",
+						"username": "h@gmail.com"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"url": "https://localhost:44323/api/wallets"
+			},
+			"response": []
+		},
+		{
+			"name": "Credit wallet",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"username": "h@gmail.com",
+						"password": "123"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"amount\": 50.0,\r\n  \"RowVersion\": \"AAAAAAAAB9E=\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://localhost:44323/api/wallets/2a89007f-b8ff-4568-8127-d2b4a97f6da6/credit"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Wallet",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"username": "h@gmail.com",
+						"password": "123"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 102\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://localhost:44323/api/wallets/2a89007f-b8ff-4568-8127-d2b4a97f6da6"
+			},
+			"response": []
+		},
+		{
+			"name": "Debit Wallet",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"username": "h@gmail.com",
+						"password": "123"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"amount\": 50.0,\r\n  \"rowversion\": \"AAAAAAAAB9E=\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://localhost:44323/api/wallets/2a89007f-b8ff-4568-8127-d2b4a97f6da6/debit"
+			},
+			"response": []
+		},
+		{
+			"name": "Get row version",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"username": "h@gmail.com",
+						"password": "123"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "https://localhost:44323/api/wallets/9922907C-E9B7-4F64-98A7-A1F09119AF20/row-version"
+			},
+			"response": []
+		},
+		{
+			"name": "GET health",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": "https://localhost:44323/api/health"
+			},
+			"response": []
+		}
+	]
+}
