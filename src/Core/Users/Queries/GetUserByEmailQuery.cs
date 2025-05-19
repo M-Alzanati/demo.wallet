@@ -44,7 +44,8 @@ namespace Application.Users.Queries
             return await Task.FromResult(new UserDto
             {
                 Id = user.Id,
-                Email = user.Email
+                Email = user.Email,
+                PasswordHash = user.PasswordHash,
             });
         }
     }

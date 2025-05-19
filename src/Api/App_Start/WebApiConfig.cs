@@ -1,7 +1,5 @@
-﻿using System.Net.Http;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Api.Filters;
-using Api.Handlers;
 
 namespace Api
 {
@@ -18,12 +16,8 @@ namespace Api
             );
 
             AutofacConfig.Register(config);
-
-            if (config.DependencyResolver.GetService(typeof(BasicAuthHandler)) is DelegatingHandler handler)
-            {
-                config.MessageHandlers.Add(handler);
-            }
             config.Filters.Add(new GlobalExceptionFilter());
+            config.Filters.Add(new BasicAuthFilter());
         }
     }
 }

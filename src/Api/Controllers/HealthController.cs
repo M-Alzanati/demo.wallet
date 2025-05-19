@@ -2,6 +2,7 @@
 
 namespace Api.Controllers
 {
+    [AllowAnonymous]
     [RoutePrefix("api/health")]
     public class HealthController : ApiController
     {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.Web.Http;
-using Api.Handlers;
 using Application.Dependency;
 using Autofac;
 using Autofac.Integration.WebApi;
@@ -33,7 +32,6 @@ namespace Api
             });
 
             builder.RegisterWebApiModelBinderProvider();
-            builder.RegisterType<BasicAuthHandler>().InstancePerLifetimeScope();
 
             var container = builder.Build();
             GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
