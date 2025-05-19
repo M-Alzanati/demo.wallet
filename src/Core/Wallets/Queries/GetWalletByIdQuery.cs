@@ -1,6 +1,7 @@
 ﻿using Domain.Interfaces;
 using MediatR;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using Application.Wallets.Dtos;
@@ -30,8 +31,16 @@ namespace Application.Wallets.Queries
             return await Task.FromResult(new WalletDto
             {
                 Id = wallet.Id,
-                Balance = wallet.Balance,
+                AvailableBalance = wallet.GetAvailableBalance(),
                 RowVersion = Convert.ToBase64String(wallet.RowVersion),
+                Transactions = wallet.Transactions.Select(t => new WalletTransactionDto
+                {
+                    Id = t.Id,
+                    Amount = t.Amount,
+                    Type = t.Type,
+                    CreatedAt = t.Timestamp,
+                    RowVersion = Convert.ToBase64String(t.RowVersion)
+                }).ToList()
             });
         }
     }

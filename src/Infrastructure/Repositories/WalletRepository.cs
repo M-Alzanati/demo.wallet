@@ -19,7 +19,8 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Wallet> GetById(Guid id, CancellationToken cancellationToken) => await _context.Wallets.FindAsync(cancellationToken, id);
+        public async Task<Wallet> GetById(Guid id, CancellationToken cancellationToken) => 
+            await _context.Wallets.Include(e => e.Transactions).FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
         public Guid Add(Wallet wallet)
         {
@@ -41,20 +42,26 @@ namespace Infrastructure.Repositories
             var query = _context.Wallets.AsQueryable();
 
             if (minBalance.HasValue)
-                query = query.Where(w => w.Balance >= minBalance.Value);
+                query = query.Where(w => w.GetAvailableBalance() >= minBalance.Value);
 
             if (maxBalance.HasValue)
-                query = query.Where(w => w.Balance <= maxBalance.Value);
+                query = query.Where(w => w.GetAvailableBalance() <= maxBalance.Value);
 
             var totalCount = await query.CountAsync();
 
             var items = await query
-                .OrderBy(w => w.Id) // or any other sorting logic
+                .OrderBy(w => w.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
+                .Include(e => e.Transactions)
                 .ToListAsync();
 
             return new PagedResult<Wallet>(items, totalCount);
+        }
+
+        public void AttachRowVersion(Wallet wallet, byte[] rowVersion)
+        {
+            _context.Entry(wallet).OriginalValues["RowVersion"] = rowVersion;
         }
     }
 }

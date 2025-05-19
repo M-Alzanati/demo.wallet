@@ -32,10 +32,9 @@ namespace Application.Wallets.Commands
             return new WalletDto()
             {
                 Id = wallet.Id,
+                AvailableBalance = wallet.GetAvailableBalance(),
                 RowVersion = Convert.ToBase64String(wallet.RowVersion),
-                Balance = wallet.Balance,
             };
         }
     }
-
 }

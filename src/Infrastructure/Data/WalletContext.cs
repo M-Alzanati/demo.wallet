@@ -17,15 +17,23 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Wallet>()
-                .HasKey(w => w.Id)
-                .Property(w => w.RowVersion)
+                .Property(t => t.RowVersion)
                 .IsRowVersion();
+
+            modelBuilder.Entity<Wallet>()
+                .HasMany(w => w.Transactions)
+                .WithRequired(t => t.Wallet)
+                .HasForeignKey(t => t.WalletId);
 
             modelBuilder.Entity<WalletTransaction>()
                 .HasRequired(t => t.Wallet)
                 .WithMany(w => w.Transactions)
                 .HasForeignKey(t => t.WalletId)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<WalletTransaction>()
+                .Property(t => t.RowVersion)
+                .IsRowVersion();
 
             modelBuilder.Entity<User>()
                 .HasKey(u => u.Id)

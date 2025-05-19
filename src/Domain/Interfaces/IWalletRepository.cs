@@ -13,5 +13,6 @@ namespace Domain.Interfaces
         void Update(Wallet wallet);
         bool Exists(Guid id);
         Task<PagedResult<Wallet>> GetWalletsAsync(int pageNumber, int pageSize, decimal? minBalance = null, decimal? maxBalance = null);
+        void AttachRowVersion(Wallet wallet, byte[] rowVersion);
     }
 }

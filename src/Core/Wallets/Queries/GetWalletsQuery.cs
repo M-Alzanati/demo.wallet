@@ -45,7 +45,7 @@ namespace Application.Wallets.Queries
             var walletDtos = pagedWallets.Items.Select(w => new WalletDto
             {
                 Id = w.Id,
-                Balance = w.Balance,
+                AvailableBalance = w.GetAvailableBalance(),
                 RowVersion = Convert.ToBase64String(w.RowVersion)
             }).ToList();
 

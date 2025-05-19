@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {
@@ -23,7 +23,6 @@
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Balance = c.Decimal(nullable: false, precision: 18, scale: 2),
                         RowVersion = c.Binary(nullable: false, fixedLength: true, timestamp: true, storeType: "rowversion"),
                     })
                 .PrimaryKey(t => t.Id)
@@ -37,8 +36,11 @@
                         WalletId = c.Guid(nullable: false),
                         TransactionId = c.String(),
                         Amount = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        CreatedAt = c.DateTime(nullable: false),
-                        IsProcessed = c.Boolean(nullable: false),
+                        Timestamp = c.DateTime(nullable: false),
+                        Type = c.Int(nullable: false),
+                        Status = c.Int(nullable: false),
+                        RemainingAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        RowVersion = c.Binary(nullable: false, fixedLength: true, timestamp: true, storeType: "rowversion"),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Wallets", t => t.WalletId)

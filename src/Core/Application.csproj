@@ -103,6 +103,7 @@
     <Compile Include="Common\Behaviors\ResilienceBehavior.cs" />
     <Compile Include="Dependency\ApplicationModule.cs" />
     <Compile Include="Users\Queries\GetUserByEmailQuery.cs" />
+    <Compile Include="Wallets\Commands\ConcurrencyCommand.cs" />
     <Compile Include="Wallets\Dtos\DebitWalletRequest.cs" />
     <Compile Include="Wallets\Dtos\CreditWalletRequest.cs" />
     <Compile Include="Users\UserDto.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Wallets\Commands\CreateWalletCommand.cs" />
     <Compile Include="Wallets\Commands\CreditWalletCommand.cs" />
     <Compile Include="Wallets\Commands\DebitWalletCommand.cs" />
+    <Compile Include="Wallets\Dtos\WalletTransactionDto.cs" />
     <Compile Include="Wallets\Queries\GetWalletByIdQuery.cs" />
     <Compile Include="Wallets\Queries\GetWalletsRowVersionQuery.cs" />
     <Compile Include="Wallets\Queries\GetWalletsQuery.cs" />

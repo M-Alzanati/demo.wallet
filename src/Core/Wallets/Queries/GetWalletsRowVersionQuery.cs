@@ -33,7 +33,7 @@ namespace Application.Wallets.Queries
             return new WalletDto
             {
                 Id = wallet.Id,
-                Balance = wallet.Balance,
+                AvailableBalance = wallet.GetAvailableBalance(),
                 RowVersion = Convert.ToBase64String(wallet.RowVersion),
             };
         }

@@ -107,9 +107,9 @@
     <Compile Include="Data\UnitOfWork.cs" />
     <Compile Include="Dependency\InfrastructureModule .cs" />
     <Compile Include="Logging\SerilogAdapter.cs" />
-    <Compile Include="Migrations\202505191226382_InitialCreate.cs" />
-    <Compile Include="Migrations\202505191226382_InitialCreate.Designer.cs">
-      <DependentUpon>202505191226382_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\202505191424074_Initial.cs" />
+    <Compile Include="Migrations\202505191424074_Initial.Designer.cs">
+      <DependentUpon>202505191424074_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -140,8 +140,8 @@
     <Folder Include="Behaviors\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202505191226382_InitialCreate.resx">
-      <DependentUpon>202505191226382_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202505191424074_Initial.resx">
+      <DependentUpon>202505191424074_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

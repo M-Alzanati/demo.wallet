@@ -1,9 +1,11 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain.Enums;
 using Infrastructure.Data;
 
 namespace Infrastructure.Repositories
@@ -23,17 +25,25 @@ namespace Infrastructure.Repositories
                 .AnyAsync(t => t.WalletId == walletId && t.TransactionId == transactionId);
         }
 
-        public async Task AddAsync(WalletTransaction transaction)
+        public void Add(WalletTransaction transaction)
         {
-            await Task.FromResult(_context.WalletTransactions.Add(transaction));
+            _context.WalletTransactions.Add(transaction);
         }
 
-        public async Task<bool?> IsProcessed(Guid walletId, string transactionId)
+        public void Update(WalletTransaction transaction)
         {
-            var transaction = await _context.WalletTransactions
-                .OrderByDescending(e => e.CreatedAt)
-                .FirstOrDefaultAsync(t => t.WalletId == walletId && t.TransactionId == transactionId);
-            return transaction?.IsProcessed;
+            _context.Entry(transaction).OriginalValues["RowVersion"] = transaction.RowVersion;
+            _context.WalletTransactions.Attach(transaction);
+            _context.Entry(transaction).State = EntityState.Modified;
+        }
+
+        public async Task<List<WalletTransaction>> GetAvailableCreditsAsync(Guid walletId)
+        {
+            return await _context.WalletTransactions
+                .Where(tx => tx.WalletId == walletId
+                             && tx.Type == TransactionType.Credit
+                             && tx.Status != TransactionStatus.Used)
+                .ToListAsync();
         }
     }
 }
