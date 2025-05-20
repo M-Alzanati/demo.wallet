@@ -17,7 +17,6 @@
 - Relate debit transactions to the credit transactions they spend.
 - Prevent duplicate processing of requests, especially on retries by using some sort of tokens.
 - In unit of work enforce consistent transaction boundaries.
-- Ensure atomicity between changes to Wallet and WalletTransaction.
 - Integrating with messaging systems like RabbitMq or Kafka or any cloud service.
 - Audit logging.
 - Deploy behind a load balancer.
